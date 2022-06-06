@@ -4,30 +4,32 @@ from time import sleep
 from datetime import datetime
 
 def main():
+
   def turnOffPc():
     hoursDivider = [2, 3, 6]
-    hoursStr = ['s', 's', '']
     seconds : int = 3600
-    i = 1
+    i = 0
     while True:
-      while i <= len(hoursDivider):
+      while i < len(hoursDivider):
         data = datetime.now()
-        notification.notify(title="Computador vai desligar em {} minuto{}.".format(int(seconds / 60), hoursStr[i-1]),
+        notification.notify(title="Computador vai desligar em {} {}.".format(int(seconds / 60), formatStr(seconds)),
                             message="{} - Aproveite e faça o backup do servidor local para o google drive.".format(data.strftime("%H:%M")),
                             toast=False
                             )
-        seconds /= hoursDivider[i-1]
+        seconds /= hoursDivider[i]
         sleep(seconds)
         i += 1
       else:
-        turnOffCommand()
+        call(['shutdown', '/s', '/f'])
         break
 
-  def turnOffCommand():
-    call(['shutdown', '/s', '/f'])
+  def formatStr(sec):
+    if sec <= 600:
+      return 'minuto'
+    else:
+      return 'minutos'
   
   turnOffPc()
-
 
 if __name__ == '__main__':
   main()
